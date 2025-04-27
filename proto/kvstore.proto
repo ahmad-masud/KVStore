@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/yourname/kvstore/proto";
+
+// KVStore service defines the available gRPC methods.
+service KVStore {
+  rpc Set(SetRequest) returns (SetResponse);
+  rpc Get(GetRequest) returns (GetResponse);
+  rpc Delete(DeleteRequest) returns (DeleteResponse);
+}
+
+// SetRequest represents a request to store a key-value pair.
+message SetRequest {
+  string key = 1;
+  string value = 2;
+  int64 ttl_seconds = 3; // Optional: 0 means no TTL
+}
+
+// SetResponse indicates success.
+message SetResponse {
+  bool success = 1;
+}
+
+// GetRequest represents a request to retrieve a value.
+message GetRequest {
+  string key = 1;
+}
+
+// GetResponse returns the value if found.
+message GetResponse {
+  string value = 1;
+  bool found = 2;
+}
+
+// DeleteRequest represents a request to remove a key.
+message DeleteRequest {
+  string key = 1;
+}
+
+// DeleteResponse indicates success.
+message DeleteResponse {
+  bool success = 1;
+}

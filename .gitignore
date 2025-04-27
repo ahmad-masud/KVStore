@@ -1,0 +1,35 @@
+# Binaries
+dkvs
+*.exe
+*.out
+*.test
+
+# Build and generated files
+/build/
+/bin/
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Go modules
+go.sum
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.swp
+
+# Proto-generated Go files (can re-gen anytime)
+proto/*.pb.go
+proto/*_grpc.pb.go
+
+# Docker
+*.tar
+*.img
+docker-compose.override.yml
+
+# Env/config
+.env
+.env.local
