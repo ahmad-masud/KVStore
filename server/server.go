@@ -5,8 +5,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/ahmadmasud/KVStore/kvstore"
-	"github.com/ahmadmasud/KVStore/proto"
+	"github.com/ahmad-masud/KVStore/kvstore"
+	"github.com/ahmad-masud/KVStore/proto"
 
 	"google.golang.org/grpc"
 )

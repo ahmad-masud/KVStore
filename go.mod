@@ -1,4 +1,4 @@
-module github.com/ahmadmasud/KVStore
+module github.com/ahmad-masud/KVStore
 
 go 1.23
 

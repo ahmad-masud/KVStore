@@ -3,7 +3,7 @@ package server
 import (
 	"time"
 
-	"github.com/ahmadmasud/KVStore/kvstore"
+	"github.com/ahmad-masud/KVStore/kvstore"
 )
 
 // Option configures the Server.
