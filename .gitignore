@@ -36,3 +36,4 @@ docker-compose.override.yml
 
 # Testing files
 examples
+data

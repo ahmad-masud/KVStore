@@ -24,6 +24,7 @@ Built for developers who want control without unnecessary complexity.
 - **Functional Options** for server customization.
 - **Extensive Unit and Integration Tests**.
 - **Simple Makefile** for easy building, testing, and running.
+- **Disk Persistance** for easy backups
 
 ---
 

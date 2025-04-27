@@ -2,7 +2,11 @@ package server
 
 import (
 	"context"
+	"log"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/ahmad-masud/KVStore/kvstore"
@@ -123,5 +127,25 @@ func (s *Server) Listen(addr string) error {
 
 	reflection.Register(grpcServer)
 
-	return grpcServer.Serve(lis)
+	// Setup signal handling
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	// Run gRPC server in background
+	errCh := make(chan error, 1)
+	go func() {
+		errCh <- grpcServer.Serve(lis)
+	}()
+
+	log.Printf("KVStore server started on %s", addr)
+
+	// Wait for signal
+	select {
+	case <-ctx.Done():
+		log.Println("Shutdown signal received. Stopping gRPC server...")
+		grpcServer.GracefulStop()
+		return nil
+	case err := <-errCh:
+		return err
+	}
 }

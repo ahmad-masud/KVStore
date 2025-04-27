@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"os"
 	"testing"
 	"time"
 
@@ -57,5 +58,21 @@ func TestWithDefaultTTL(t *testing.T) {
 
 	if s.defaultTTL != ttl {
 		t.Fatalf("expected defaultTTL to be set")
+	}
+}
+
+func TestWithDiskPersistence(t *testing.T) {
+	tmpfile, err := os.CreateTemp("", "kvstore_test_log")
+	if err != nil {
+		t.Fatalf("failed to create temp file: %v", err)
+	}
+	defer os.Remove(tmpfile.Name())
+
+	s := NewServer(
+		WithDiskPersistence(tmpfile.Name()),
+	)
+
+	if s.storage == nil {
+		t.Fatalf("expected storage to be initialized")
 	}
 }

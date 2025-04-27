@@ -36,3 +36,14 @@ func WithDefaultTTL(ttl time.Duration) Option {
 		s.defaultTTL = ttl
 	}
 }
+
+// WithDiskPersistence enables persistence using an append-only file.
+func WithDiskPersistence(path string) Option {
+	return func(s *Server) {
+		diskStore, err := kvstore.NewPersistentKVStore(path)
+		if err != nil {
+			panic("failed to initialize persistent store: " + err.Error())
+		}
+		s.storage = diskStore
+	}
+}
