@@ -11,6 +11,8 @@ import (
 	"google.golang.org/grpc"
 )
 
+// PreHookFunc is a function type that defines the signature for pre-hook functions.
+// It takes a context, method name, and request object as parameters and returns an error if any.
 type Server struct {
 	proto.UnimplementedKVStoreServer
 
@@ -20,6 +22,8 @@ type Server struct {
 	defaultTTL time.Duration
 }
 
+// PreHookFunc is a function type that defines the signature for pre-hook functions.
+// It takes a context, method name, and request object as parameters and returns an error if any.
 func NewServer(opts ...Option) *Server {
 	s := &Server{
 		storage: kvstore.New(),
