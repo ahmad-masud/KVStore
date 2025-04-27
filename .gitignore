@@ -33,3 +33,6 @@ docker-compose.override.yml
 # Env/config
 .env
 .env.local
+
+# Testing files
+examples

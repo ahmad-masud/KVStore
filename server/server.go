@@ -9,6 +9,7 @@ import (
 	"github.com/ahmad-masud/KVStore/proto"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 // Server is a gRPC server that handles key-value store operations.
@@ -119,6 +120,8 @@ func (s *Server) Listen(addr string) error {
 
 	grpcServer := grpc.NewServer()
 	proto.RegisterKVStoreServer(grpcServer, s)
+
+	reflection.Register(grpcServer)
 
 	return grpcServer.Serve(lis)
 }
