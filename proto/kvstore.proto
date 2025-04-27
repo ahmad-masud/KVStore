@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package proto;
 
-option go_package = "github.com/yourname/kvstore/proto";
+option go_package = "github.com/ahmad-masud/KVStore/proto";
 
 // KVStore service defines the available gRPC methods.
 service KVStore {
