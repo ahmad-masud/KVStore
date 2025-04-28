@@ -14,7 +14,7 @@ func TestPersistentKVStore_SetGetDelete(t *testing.T) {
 	}
 	defer os.Remove(tmpfile.Name())
 
-	store, err := NewPersistentKVStore(tmpfile.Name())
+	store, err := NewPersistentKVStore(tmpfile.Name(), true)
 	if err != nil {
 		t.Fatalf("failed to create PersistentKVStore: %v", err)
 	}
@@ -45,7 +45,7 @@ func TestPersistentKVStore_Recovery(t *testing.T) {
 	defer os.Remove(tmpfile.Name())
 
 	// First instance: write data
-	store, err := NewPersistentKVStore(tmpfile.Name())
+	store, err := NewPersistentKVStore(tmpfile.Name(), true)
 	if err != nil {
 		t.Fatalf("failed to create PersistentKVStore: %v", err)
 	}
@@ -55,7 +55,7 @@ func TestPersistentKVStore_Recovery(t *testing.T) {
 	// Simulate server restart
 	store.logFile.Close()
 
-	store2, err := NewPersistentKVStore(tmpfile.Name())
+	store2, err := NewPersistentKVStore(tmpfile.Name(), false)
 	if err != nil {
 		t.Fatalf("failed to recover PersistentKVStore: %v", err)
 	}

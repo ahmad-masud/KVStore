@@ -21,7 +21,7 @@ type PersistentKVStore struct {
 
 // NewPersistentKVStore creates a new PersistentKVStore, replaying any existing log to rebuild the in-memory store.
 // The logPath specifies the file to be used for persistence.
-func NewPersistentKVStore(logPath string) (*PersistentKVStore, error) {
+func NewPersistentKVStore(logPath string, compact bool) (*PersistentKVStore, error) {
 	dir := filepath.Dir(logPath)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return nil, fmt.Errorf("failed to create directory for persistence: %w", err)
@@ -48,7 +48,9 @@ func NewPersistentKVStore(logPath string) (*PersistentKVStore, error) {
 		return nil, fmt.Errorf("error reading persistence file: %w", err)
 	}
 
-	p.StartLogCompaction()
+	if compact {
+		p.StartLogCompaction()
+	}
 
 	return p, nil
 }

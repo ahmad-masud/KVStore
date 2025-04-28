@@ -69,7 +69,7 @@ func TestWithDiskPersistence(t *testing.T) {
 	defer os.Remove(tmpfile.Name())
 
 	s := NewServer(
-		WithDiskPersistence(tmpfile.Name()),
+		WithDiskPersistence(tmpfile.Name(), true),
 	)
 
 	if s.storage == nil {
