@@ -48,7 +48,72 @@ func NewPersistentKVStore(logPath string) (*PersistentKVStore, error) {
 		return nil, fmt.Errorf("error reading persistence file: %w", err)
 	}
 
+	p.StartLogCompaction()
+
 	return p, nil
+}
+
+// Compacts the log file by deleting unnecessary entries and keeping only the newest entry for each key.
+func (p *PersistentKVStore) compactLogs() {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	p.logFile.Sync()
+	p.logFile.Seek(0, 0) // rewind to start
+
+	scanner := bufio.NewScanner(p.logFile)
+	latestOps := make(map[string]string)
+
+	// Read all operations, remember only latest per key
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.SplitN(line, " ", 4)
+		if len(parts) < 2 {
+			continue
+		}
+		key := parts[1]
+		latestOps[key] = line
+	}
+
+	if err := scanner.Err(); err != nil {
+		return
+	}
+
+	// Write to a temporary file (different path)
+	oldPath := p.logFile.Name()
+	tempPath := oldPath + ".tmp"
+
+	tempFile, err := os.OpenFile(tempPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+	if err != nil {
+		return
+	}
+	writer := bufio.NewWriter(tempFile)
+	for _, line := range latestOps {
+		writer.WriteString(line + "\n")
+	}
+	writer.Flush()
+	tempFile.Sync()
+	tempFile.Close()
+
+	// Atomically replace old file with new one
+	p.logFile.Close()
+	err = os.Rename(tempPath, oldPath)
+	if err != nil {
+		return
+	}
+
+	// Reopen the (now compacted) log file
+	p.logFile, _ = os.OpenFile(oldPath, os.O_RDWR|os.O_APPEND, 0644)
+}
+
+// Runs a background goroutine to compact the log file periodically.
+func (p *PersistentKVStore) StartLogCompaction() {
+	go func() {
+		for {
+			time.Sleep(60 * time.Second)
+			p.compactLogs()
+		}
+	}()
 }
 
 // replayLine processes a single log line and applies it to the in-memory store.
