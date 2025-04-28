@@ -119,7 +119,7 @@ func TestServer_TTLExpiration(t *testing.T) {
 	_, err := client.Set(ctx, &proto.SetRequest{
 		Key:        "baz",
 		Value:      "qux",
-		TtlSeconds: 1, // expires in 1 second
+		Ttl: 1, // expires in 1 second
 	})
 	if err != nil {
 		t.Fatalf("Set failed: %v", err)

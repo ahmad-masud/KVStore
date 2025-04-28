@@ -50,8 +50,8 @@ func (s *Server) Set(ctx context.Context, req *proto.SetRequest) (*proto.SetResp
 	}
 
 	var ttl time.Duration
-	if req.TtlSeconds > 0 {
-		ttl = time.Duration(req.TtlSeconds) * time.Second
+	if req.Ttl > 0 {
+		ttl = time.Duration(req.Ttl) * time.Second
 	} else if s.defaultTTL > 0 {
 		ttl = s.defaultTTL
 	}

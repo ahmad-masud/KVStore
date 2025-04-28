@@ -15,7 +15,7 @@ service KVStore {
 message SetRequest {
   string key = 1;
   string value = 2;
-  int64 ttl_seconds = 3; // Optional: 0 means no TTL
+  int64 ttl = 3; // Optional: 0 means no TTL
 }
 
 // SetResponse indicates success.
