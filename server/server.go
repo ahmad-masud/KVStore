@@ -52,11 +52,13 @@ func (s *Server) Set(ctx context.Context, req *proto.SetRequest) (*proto.SetResp
 	var ttl time.Duration
 	if req.Ttl > 0 {
 		ttl = time.Duration(req.Ttl) * time.Second
+		s.storage.SetWithTTL(req.Key, req.Value, ttl)
 	} else if s.defaultTTL > 0 {
 		ttl = s.defaultTTL
+		s.storage.SetWithTTL(req.Key, req.Value, ttl)
+	} else {
+		s.storage.Set(req.Key, req.Value)
 	}
-
-	s.storage.SetWithTTL(req.Key, req.Value, ttl)
 
 	resp := &proto.SetResponse{Success: true}
 
